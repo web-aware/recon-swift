@@ -112,7 +112,7 @@ struct ReconBlockParser: ReconParser {
     } else if input.isDone {
       return done(builder.state, input)
     }
-    return cont(self, input)
+    return cont(ReconBlockParser(builder), input)
   }
 }
 
@@ -126,7 +126,7 @@ struct ReconBlockKeyParser: ReconParser {
   }
 
   init(_ builder: ValueBuilder) {
-    self.init(ReconBlockValueParser(), builder)
+    self.init(ReconBlockItemParser(), builder)
   }
 
   func feed(input: ReconInput) -> ReconParsee {
@@ -138,7 +138,13 @@ struct ReconBlockKeyParser: ReconParser {
     case ReconParsee.Cont(let next, let remaining):
       return cont(ReconBlockKeyParser(next, builder), remaining)
     case ReconParsee.Done(let key as Value, let remaining):
-      return cont(ReconBlockKeyRestParser(key, builder), remaining)
+      if remaining.isDone {
+        var builder = self.builder
+        builder.appendValue(key)
+        return done(builder.state, remaining)
+      } else {
+        return cont(ReconBlockKeyRestParser(key, builder), remaining)
+      }
     default:
       return parsee
     }
@@ -155,11 +161,12 @@ struct ReconBlockKeyRestParser: ReconParser {
   }
 
   func feed(var input: ReconInput) -> ReconParsee {
+    var builder = self.builder
     while let c = input.head where isSpace(c) {
       input = input.tail
     }
     if let c = input.head where c == ":" {
-      return cont(ReconBlockKeyThenValueParser(key, builder), input)
+      return cont(ReconBlockKeyThenValueParser(key, builder), input.tail)
     } else if !input.isEmpty {
       builder.appendValue(key)
       return cont(ReconBlockSeparatorParser(builder), input)
@@ -181,6 +188,7 @@ struct ReconBlockKeyThenValueParser: ReconParser {
   }
 
   func feed(var input: ReconInput) -> ReconParsee {
+    var builder = self.builder
     while let c = input.head where isSpace(c) {
       input = input.tail
     }
@@ -206,11 +214,12 @@ struct ReconBlockKeyValueParser: ReconParser {
   }
 
   init(_ key: Value, _ builder: ValueBuilder) {
-    self.init(key, ReconBlockValueParser(), builder)
+    self.init(key, ReconBlockItemParser(), builder)
   }
 
   func feed(input: ReconInput) -> ReconParsee {
     var parsee = cont(self.value, input)
+    var builder = self.builder
     while case ReconParsee.Cont(let next, let remaining) = parsee where !remaining.isEmpty || remaining.isDone {
       parsee = next.feed(remaining)
     }
@@ -384,14 +393,181 @@ struct ReconAttrParamRestParser: ReconParser {
 }
 
 
-struct ReconBlockValueParser: ReconParser {
+struct ReconBlockItemParser: ReconParser {
+  let builder: ReconBuilder?
+
+  init(_ builder: ReconBuilder?) {
+    self.builder = builder
+  }
+
+  init() {
+    self.init(nil)
+  }
+
   func feed(input: ReconInput) -> ReconParsee {
-    assert(false)
+    if let c = input.head {
+      switch c {
+      case "@":
+        return cont(ReconBlockItemFieldParser(ReconAttrParser(), builder), input)
+      case "{":
+        let builder = self.builder ?? RecordBuilder()
+        let value = ReconRecordParser(builder)
+        return cont(ReconBlockItemInnerParser(value, builder), input)
+      case "[":
+        let builder = self.builder ?? RecordBuilder()
+        let value = ReconMarkupParser(builder)
+        return cont(ReconBlockItemInnerParser(value, builder), input)
+      case _ where isNameStartChar(c):
+        return cont(ReconBlockItemValueParser(ReconIdentParser(), builder), input)
+      case "\"":
+        return cont(ReconBlockItemValueParser(ReconStringParser(), builder), input)
+      case _ where c == "-" || c >= "0" && c <= "9":
+        return cont(ReconBlockItemValueParser(ReconNumberParser(), builder), input)
+      case "%":
+        return cont(ReconBlockItemValueParser(ReconDataParser(), builder), input)
+      default:
+        if let builder = self.builder {
+          return done(builder.state, input)
+        } else {
+          return done(Value.Extant, input)
+        }
+      }
+    } else if input.isDone {
+      if let builder = self.builder {
+        return done(builder.state, input)
+      } else {
+        return done(Value.Extant, input)
+      }
+    }
+    return cont(ReconBlockItemParser(builder), input)
+  }
+}
+
+struct ReconBlockItemFieldParser: ReconParser {
+  let field: ReconParser
+  let builder: ReconBuilder?
+
+  init(_ field: ReconParser, _ builder: ReconBuilder?) {
+    self.field = field
+    self.builder = builder
+  }
+
+  func feed(input: ReconInput) -> ReconParsee {
+    var parsee = cont(self.field, input)
+    while case ReconParsee.Cont(let next, let remaining) = parsee where !remaining.isEmpty || remaining.isDone {
+      parsee = next.feed(remaining)
+    }
+    switch parsee {
+    case ReconParsee.Cont(let next, let remaining):
+      return cont(ReconBlockItemFieldParser(next, builder), remaining)
+    case ReconParsee.Done(let field as Field, let remaining):
+      var builder = self.builder ?? ValueBuilder()
+      builder.appendField(field)
+      return cont(ReconBlockItemFieldRestParser(builder), remaining)
+    default:
+      return parsee
+    }
+  }
+}
+
+struct ReconBlockItemFieldRestParser: ReconParser {
+  let builder: ReconBuilder
+
+  init(_ builder: ReconBuilder) {
+    self.builder = builder
+  }
+
+  func feed(var input: ReconInput) -> ReconParsee {
+    while let c = input.head where isSpace(c) {
+      input = input.tail
+    }
+    if !input.isEmpty {
+      return cont(ReconBlockItemParser(builder), input)
+    } else if input.isDone {
+      return done(builder.state, input)
+    }
+    return cont(ReconBlockItemFieldRestParser(builder), input)
+  }
+}
+
+struct ReconBlockItemValueParser: ReconParser {
+  let value: ReconParser
+  let builder: ReconBuilder?
+
+  init(_ value: ReconParser, _ builder: ReconBuilder?) {
+    self.value = value
+    self.builder = builder
+  }
+
+  func feed(input: ReconInput) -> ReconParsee {
+    var parsee = cont(self.value, input)
+    while case ReconParsee.Cont(let next, let remaining) = parsee where !remaining.isEmpty || remaining.isDone {
+      parsee = next.feed(remaining)
+    }
+    switch parsee {
+    case ReconParsee.Cont(let next, let remaining):
+      return cont(ReconBlockItemValueParser(next, builder), remaining)
+    case ReconParsee.Done(let value, let remaining):
+      var builder = self.builder ?? ValueBuilder()
+      builder.appendAny(value)
+      if remaining.isDone {
+        return done(builder.state, remaining)
+      } else {
+        return cont(ReconBlockItemRestParser(builder), remaining)
+      }
+    default:
+      return parsee
+    }
+  }
+}
+
+struct ReconBlockItemInnerParser: ReconParser {
+  let value: ReconParser
+  let builder: ReconBuilder
+
+  init(_ value: ReconParser, _ builder: ReconBuilder) {
+    self.value = value
+    self.builder = builder
+  }
+
+  func feed(input: ReconInput) -> ReconParsee {
+    var parsee = cont(self.value, input)
+    while case ReconParsee.Cont(let next, let remaining) = parsee where !remaining.isEmpty || remaining.isDone {
+      parsee = next.feed(remaining)
+    }
+    switch parsee {
+    case ReconParsee.Cont(let next, let remaining):
+      return cont(ReconBlockItemInnerParser(next, builder), remaining)
+    case ReconParsee.Done(_, let remaining):
+      return cont(ReconBlockItemRestParser(builder), remaining)
+    default:
+      return parsee
+    }
+  }
+}
+
+struct ReconBlockItemRestParser: ReconParser {
+  let builder: ReconBuilder
+
+  init(_ builder: ReconBuilder) {
+    self.builder = builder
+  }
+
+  func feed(var input: ReconInput) -> ReconParsee {
+    while let c = input.head where isSpace(c) {
+      input = input.tail
+    }
+    if let c = input.head where c == "@" {
+      return cont(ReconBlockItemParser(builder), input)
+    } else if !input.isEmpty || input.isDone {
+      return done(builder.state, input)
+    }
+    return cont(ReconBlockItemRestParser(builder), input)
   }
 }
 
 
-struct ReconInlineValueParser: ReconParser {
+struct ReconInlineItemParser: ReconParser {
   func feed(input: ReconInput) -> ReconParsee {
     assert(false)
   }
@@ -399,6 +575,12 @@ struct ReconInlineValueParser: ReconParser {
 
 
 struct ReconRecordParser: ReconParser {
+  let builder: ReconBuilder?
+
+  init(_ builder: ReconBuilder?) {
+    self.builder = builder
+  }
+
   func feed(input: ReconInput) -> ReconParsee {
     assert(false)
   }
@@ -406,6 +588,16 @@ struct ReconRecordParser: ReconParser {
 
 
 struct ReconMarkupParser: ReconParser {
+  let builder: ReconBuilder?
+
+  init(_ builder: ReconBuilder?) {
+    self.builder = builder
+  }
+
+  init() {
+    self.init(nil)
+  }
+
   func feed(input: ReconInput) -> ReconParsee {
     assert(false)
   }

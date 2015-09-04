@@ -20,6 +20,8 @@
 		1579BE5D1B924B1300EB39AB /* ReconParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1579BE5C1B924B1300EB39AB /* ReconParser.swift */; settings = {ASSET_TAGS = (); }; };
 		1579BE5E1B924B1300EB39AB /* ReconParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1579BE5C1B924B1300EB39AB /* ReconParser.swift */; settings = {ASSET_TAGS = (); }; };
 		1579BE661B925B1100EB39AB /* ReconParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1579BE651B925B1100EB39AB /* ReconParserTests.swift */; settings = {ASSET_TAGS = (); }; };
+		1595621C1B99FCA100AAECC1 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1595621B1B99FCA100AAECC1 /* Record.swift */; settings = {ASSET_TAGS = (); }; };
+		1595621D1B99FCA100AAECC1 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1595621B1B99FCA100AAECC1 /* Record.swift */; settings = {ASSET_TAGS = (); }; };
 		15B4828B1B93D65100B8F93C /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B4828A1B93D65100B8F93C /* Value.swift */; settings = {ASSET_TAGS = (); }; };
 		15B4828C1B93D65100B8F93C /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B4828A1B93D65100B8F93C /* Value.swift */; settings = {ASSET_TAGS = (); }; };
 		15B4828E1B94036600B8F93C /* MurmurHash3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B4828D1B94036600B8F93C /* MurmurHash3.swift */; settings = {ASSET_TAGS = (); }; };
@@ -60,6 +62,7 @@
 		1579BE591B924A9D00EB39AB /* ReconParsee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReconParsee.swift; sourceTree = "<group>"; };
 		1579BE5C1B924B1300EB39AB /* ReconParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReconParser.swift; sourceTree = "<group>"; };
 		1579BE651B925B1100EB39AB /* ReconParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReconParserTests.swift; sourceTree = "<group>"; };
+		1595621B1B99FCA100AAECC1 /* Record.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		15B4828A1B93D65100B8F93C /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
 		15B4828D1B94036600B8F93C /* MurmurHash3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MurmurHash3.swift; sourceTree = "<group>"; };
 		15B482901B940A1000B8F93C /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
@@ -130,6 +133,7 @@
 				1579BE531B92497D00EB39AB /* ReconInputString.swift */,
 				1579BE591B924A9D00EB39AB /* ReconParsee.swift */,
 				1579BE5C1B924B1300EB39AB /* ReconParser.swift */,
+				1595621B1B99FCA100AAECC1 /* Record.swift */,
 				15B4828A1B93D65100B8F93C /* Value.swift */,
 			);
 			path = Recon;
@@ -323,6 +327,7 @@
 				15B4828B1B93D65100B8F93C /* Value.swift in Sources */,
 				153E82F01B923AED00929BA1 /* ReconInput.swift in Sources */,
 				1579BE541B92497D00EB39AB /* ReconInputString.swift in Sources */,
+				1595621C1B99FCA100AAECC1 /* Record.swift in Sources */,
 				15B4828E1B94036600B8F93C /* MurmurHash3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -347,6 +352,7 @@
 				15B4828C1B93D65100B8F93C /* Value.swift in Sources */,
 				153E82F11B923AEE00929BA1 /* ReconInput.swift in Sources */,
 				1579BE551B92497D00EB39AB /* ReconInputString.swift in Sources */,
+				1595621D1B99FCA100AAECC1 /* Record.swift in Sources */,
 				15B4828F1B94036600B8F93C /* MurmurHash3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

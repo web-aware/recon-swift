@@ -143,4 +143,16 @@ class ReconParserTests: XCTestCase {
   func testParseNakedAttr() {
     XCTAssertTrue(ReconAttrParser().parse("@").isFail)
   }
+
+  func testParseBlockItem() {
+    XCTAssertEqual(ReconBlockItemParser().parse("@test ").value as? Value, Value.Record(value: [Item.Attr("test")]))
+    XCTAssertEqual(ReconBlockItemParser().parse("\"test\"").value as? Value, Value.Text(value: "test"))
+    XCTAssertEqual(ReconBlockItemParser().parse("2.5").value as? Value, Value.Number(value: 2.5))
+  }
+
+  func testParseBlock() {
+    let x = ReconBlockParser().parse("1,2").value as? Value
+    let y = Value.Record(value: [Item.Number(1.0), Item.Number(2.0)])
+    XCTAssertEqual(x, y)
+  }
 }
