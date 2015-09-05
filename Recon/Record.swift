@@ -12,7 +12,16 @@ public struct Record: CollectionType, ArrayLiteralConvertible, Hashable {
     self.fields = fields
   }
 
+  public init(_ items: [Item]) {
+    self.init(items: items, fields: nil)
+  }
+
   public init(arrayLiteral items: Item...) {
+    self.init(items: items, fields: nil)
+    reindex()
+  }
+
+  public init(_ items: Item...) {
     self.init(items: items, fields: nil)
     reindex()
   }
@@ -74,6 +83,10 @@ public struct Record: CollectionType, ArrayLiteralConvertible, Hashable {
       }
       return nil
     }
+  }
+
+  public subscript(key: String) -> Value? {
+    return self[Value.Text(key)]
   }
 
   public mutating func append(item: Item) {

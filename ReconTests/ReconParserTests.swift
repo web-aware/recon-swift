@@ -136,8 +136,8 @@ class ReconParserTests: XCTestCase {
   }
 
   func testParseExtantAttr() {
-    XCTAssertEqual(ReconAttrParser().parse("@a").value as? Field, Field.Attr(key: "a", value: Value.Extant))
-    XCTAssertEqual(ReconAttrParser().parse("@test").value as? Field, Field.Attr(key: "test", value: Value.Extant))
+    XCTAssertEqual(ReconAttrParser().parse("@a").value as? Field, Field.Attr("a", Value.Extant))
+    XCTAssertEqual(ReconAttrParser().parse("@test").value as? Field, Field.Attr("test", Value.Extant))
   }
 
   func testParseNakedAttr() {
@@ -145,14 +145,30 @@ class ReconParserTests: XCTestCase {
   }
 
   func testParseBlockItem() {
-    XCTAssertEqual(ReconBlockItemParser().parse("@test ").value as? Value, Value.Record(value: [Item.Attr("test")]))
-    XCTAssertEqual(ReconBlockItemParser().parse("\"test\"").value as? Value, Value.Text(value: "test"))
-    XCTAssertEqual(ReconBlockItemParser().parse("2.5").value as? Value, Value.Number(value: 2.5))
+    XCTAssertEqual(ReconBlockItemParser().parse("@test ").value as? Value, Value.Record([Item.Attr("test")]))
+    XCTAssertEqual(ReconBlockItemParser().parse("\"test\"").value as? Value, Value.Text("test"))
+    XCTAssertEqual(ReconBlockItemParser().parse("2.5").value as? Value, Value.Number(2.5))
+  }
+
+  func testParseEmptyRecord() {
+    XCTAssertEqual(ReconRecordParser().parse("{}").value as? Value, Value.Record([]))
+  }
+
+  func testParseNonEmptyRecord() {
+    XCTAssertEqual(ReconRecordParser().parse("{1,2}").value as? Value, Value.Record([Item.Number(1.0), Item.Number(2.0)]))
+  }
+
+  func testParseEmptyMarkup() {
+    XCTAssertEqual(ReconMarkupParser().parse("[]").value as? Value, Value.Record([]))
+  }
+
+  func testParseNonEmptyMarkup() {
+    XCTAssertEqual(ReconMarkupParser().parse("[test]").value as? Value, Value.Record([Item.Text("test")]))
   }
 
   func testParseBlock() {
     let x = ReconBlockParser().parse("1,2").value as? Value
-    let y = Value.Record(value: [Item.Number(1.0), Item.Number(2.0)])
+    let y = Value.Record([Item.Number(1.0), Item.Number(2.0)])
     XCTAssertEqual(x, y)
   }
 }
