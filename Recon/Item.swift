@@ -1,13 +1,135 @@
-public typealias ReconField = Field
-public typealias ReconValue = Value
-public typealias ReconRecord = Record
-public typealias ReconText = String
-public typealias ReconData = Data
-public typealias ReconNumber = Double
-
 public enum Item: Hashable {
   case Field(ReconField)
   case Value(ReconValue)
+
+  public var isField: Bool {
+    if case Field = self {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  public var isAttr: Bool {
+    if case Field(let field) = self {
+      return field.isAttr
+    } else {
+      return false
+    }
+  }
+
+  public var isSlot: Bool {
+    if case Field(let field) = self {
+      return field.isSlot
+    } else {
+      return false
+    }
+  }
+
+  public var isValue: Bool {
+    if case Value = self {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  public var isRecord: Bool {
+    if case Value(let value) = self {
+      return value.isRecord
+    } else {
+      return false
+    }
+  }
+
+  public var isText: Bool {
+    if case Value(let value) = self {
+      return value.isText
+    } else {
+      return false
+    }
+  }
+
+  public var isData: Bool {
+    if case Value(let value) = self {
+      return value.isData
+    } else {
+      return false
+    }
+  }
+
+  public var isNumber: Bool {
+    if case Value(let value) = self {
+      return value.isNumber
+    } else {
+      return false
+    }
+  }
+
+  public var isExtant: Bool {
+    if case Value(let value) = self {
+      return value.isExtant
+    } else {
+      return false
+    }
+  }
+
+  public var isAbsent: Bool {
+    if case Value(let value) = self {
+      return value.isAbsent
+    } else {
+      return false
+    }
+  }
+
+  public var key: ReconValue? {
+    if case Field(let field) = self {
+      return field.key
+    } else {
+      return nil
+    }
+  }
+
+  public var value: ReconValue {
+    switch self {
+    case Field(let field):
+      return field.value
+    case Value(let value):
+      return value
+    }
+  }
+
+  public var record: Record? {
+    if case Value(let value) = self {
+      return value.record
+    } else {
+      return nil
+    }
+  }
+
+  public var text: String? {
+    if case Value(let value) = self {
+      return value.text
+    } else {
+      return nil
+    }
+  }
+
+  public var data: Data? {
+    if case Value(let value) = self {
+      return value.data
+    } else {
+      return nil
+    }
+  }
+
+  public var number: Double? {
+    if case Value(let value) = self {
+      return value.number
+    } else {
+      return nil
+    }
+  }
 
   public var first: Item {
     switch self {
@@ -24,24 +146,6 @@ public enum Item: Hashable {
       return value.last
     default:
       return Item.Absent
-    }
-  }
-
-  public var key: ReconValue? {
-    switch self {
-    case Field(let field):
-      return field.key
-    default:
-      return nil
-    }
-  }
-
-  public var value: ReconValue {
-    switch self {
-    case Field(let field):
-      return field.value
-    case Value(let value):
-      return value
     }
   }
 
@@ -69,6 +173,42 @@ public enum Item: Hashable {
       return value[key]
     default:
       return ReconValue.Absent
+    }
+  }
+
+  public func writeRecon(inout string: String) {
+    switch self {
+    case Field(let field):
+      field.writeRecon(&string)
+    case Value(let value):
+      value.writeRecon(&string)
+    }
+  }
+
+  public func writeReconBlock(inout string: String) {
+    switch self {
+    case Field(let field):
+      field.writeRecon(&string)
+    case Value(let value):
+      value.writeReconBlock(&string)
+    }
+  }
+
+  public var recon: String {
+    switch self {
+    case Field(let field):
+      return field.recon
+    case Value(let value):
+      return value.recon
+    }
+  }
+
+  public var reconBlock: String {
+    switch self {
+    case Field(let field):
+      return field.recon
+    case Value(let value):
+      return value.reconBlock
     }
   }
 
@@ -114,6 +254,10 @@ public enum Item: Hashable {
     return Item.Value(ReconValue.Data(value))
   }
 
+  public static func Data(base64 string: String) -> Item {
+    return Item.Value(ReconValue.Data(ReconData.decodeBase64(string)!))
+  }
+
   public static func Number(value: Double) -> Item {
     return Item.Value(ReconValue.Number(value))
   }
@@ -135,7 +279,7 @@ public enum Item: Hashable {
   }
 }
 
-public func ==(lhs: Item, rhs: Item) -> Bool {
+public func == (lhs: Item, rhs: Item) -> Bool {
   switch (lhs, rhs) {
   case (.Field(let x), .Field(let y)):
     return x == y

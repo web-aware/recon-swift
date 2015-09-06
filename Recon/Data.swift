@@ -1,3 +1,5 @@
+public typealias ReconData = Data
+
 public struct Data: Hashable {
   var buffer: ManagedBuffer<(Int, Int), UInt8>
 
@@ -31,6 +33,63 @@ public struct Data: Hashable {
       assert(0 <= index && index < size)
       buffer.withUnsafeMutablePointerToElements { $0[index] = newValue }
     }
+  }
+
+  func writeBase64(inout string: String) {
+    func encodeDigit(digit: UInt8) -> UnicodeScalar {
+      if digit >= 0 && digit < 26 {
+        return UnicodeScalar(UInt8(UnicodeScalar("A").value) + digit)
+      } else if digit >= 26 && digit < 52 {
+        return UnicodeScalar(UInt8(UnicodeScalar("a").value) + (digit - 26))
+      } else if digit >= 52 && digit < 62 {
+        return UnicodeScalar(UInt8(UnicodeScalar("0").value) + (digit - 52))
+      } else if digit == 62 {
+        return UnicodeScalar("+")
+      } else if digit == 63 {
+        return UnicodeScalar("/")
+      } else {
+        assert(false) // unreachable
+      }
+    }
+    let n = self.size
+    var i = 0
+    buffer.withUnsafeMutablePointerToElements { bytes in
+      while (i + 2 < n) {
+        let x = bytes[i]
+        let y = bytes[i + 1]
+        let z = bytes[i + 2]
+        string.append(encodeDigit(x >> 2))
+        string.append(encodeDigit((x << 4 | y >> 4) & 0x3F))
+        string.append(encodeDigit((y << 2 | z >> 6) & 0x3F))
+        string.append(encodeDigit(z & 0x3F))
+        i += 3
+      }
+      if i + 1 < n {
+        let x = bytes[i]
+        let y = bytes[i + 1]
+        string.append(encodeDigit(x >> 2))
+        string.append(encodeDigit((x << 4 | y >> 4) & 0x3F))
+        string.append(encodeDigit(y << 2 & 0x3F))
+        string.append(UnicodeScalar("="))
+      } else if i < n {
+        let x = bytes[i]
+        string.append(encodeDigit(x >> 2))
+        string.append(encodeDigit(x << 4 & 0x3F))
+        string.append(UnicodeScalar("="))
+        string.append(UnicodeScalar("="))
+      }
+    }
+  }
+
+  public func writeRecon(inout string: String) {
+    string.append(UnicodeScalar("%"))
+    writeBase64(&string)
+  }
+
+  public var recon: String {
+    var string = ""
+    writeRecon(&string)
+    return string
   }
 
   public var hashValue: Int {
@@ -130,7 +189,7 @@ public struct Data: Hashable {
   }
 }
 
-public func ==(lhs: Data, rhs: Data) -> Bool {
+public func == (lhs: Data, rhs: Data) -> Bool {
   let n = lhs.size
   return n == rhs.size && lhs.buffer.withUnsafeMutablePointerToElements { xs in
     rhs.buffer.withUnsafeMutablePointerToElements { ys in

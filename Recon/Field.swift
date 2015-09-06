@@ -1,6 +1,24 @@
+public typealias ReconField = Field
+
 public enum Field: Hashable {
   case Attr(String, Value)
   case Slot(Value, Value)
+
+  public var isAttr: Bool {
+    if case Attr = self {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  public var isSlot: Bool {
+    if case Slot = self {
+      return true
+    } else {
+      return false
+    }
+  }
 
   var key: Value {
     switch self {
@@ -20,6 +38,39 @@ public enum Field: Hashable {
     }
   }
 
+  func writeReconAttr(key: String, _ value: Value, inout _ string: String) {
+    string.append(UnicodeScalar("@"))
+    key.writeReconIdent(&string)
+    if value != Value.Extant {
+      string.append(UnicodeScalar("("))
+      value.writeReconBlock(&string)
+      string.append(UnicodeScalar(")"))
+    }
+  }
+
+  func writeReconSlot(key: Value, _ value: Value, inout _ string: String) {
+    key.writeRecon(&string)
+    string.append(UnicodeScalar(":"))
+    if value != Value.Extant {
+      value.writeRecon(&string)
+    }
+  }
+
+  public func writeRecon(inout string: String) {
+    switch self {
+    case Attr(let key, let value):
+      writeReconAttr(key, value, &string)
+    case Slot(let key, let value):
+      writeReconSlot(key, value, &string)
+    }
+  }
+
+  public var recon: String {
+    var string = ""
+    writeRecon(&string)
+    return string
+  }
+
   public var hashValue: Int {
     switch self {
     case Attr(let key, let value):
@@ -30,7 +81,7 @@ public enum Field: Hashable {
   }
 }
 
-public func ==(lhs: Field, rhs: Field) -> Bool {
+public func == (lhs: Field, rhs: Field) -> Bool {
   switch (lhs, rhs) {
   case (.Attr(let k1, let v1), .Attr(let k2, let v2)):
     return k1 == k2 && v1 == v2

@@ -28,6 +28,11 @@
 		159562261B9BA63900AAECC1 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159562241B9BA63900AAECC1 /* Item.swift */; settings = {ASSET_TAGS = (); }; };
 		159562281B9BA66B00AAECC1 /* ReconBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159562271B9BA66B00AAECC1 /* ReconBuilder.swift */; settings = {ASSET_TAGS = (); }; };
 		159562291B9BA66B00AAECC1 /* ReconBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159562271B9BA66B00AAECC1 /* ReconBuilder.swift */; settings = {ASSET_TAGS = (); }; };
+		1595622E1B9BAA2700AAECC1 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1595622D1B9BAA2700AAECC1 /* Text.swift */; settings = {ASSET_TAGS = (); }; };
+		1595622F1B9BAA2700AAECC1 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1595622D1B9BAA2700AAECC1 /* Text.swift */; settings = {ASSET_TAGS = (); }; };
+		159562311B9BAA9000AAECC1 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159562301B9BAA9000AAECC1 /* Number.swift */; settings = {ASSET_TAGS = (); }; };
+		159562321B9BAA9000AAECC1 /* Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159562301B9BAA9000AAECC1 /* Number.swift */; settings = {ASSET_TAGS = (); }; };
+		159562391B9BC95200AAECC1 /* ReconSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159562361B9BC91300AAECC1 /* ReconSerializationTests.swift */; settings = {ASSET_TAGS = (); }; };
 		15B4828B1B93D65100B8F93C /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B4828A1B93D65100B8F93C /* Value.swift */; settings = {ASSET_TAGS = (); }; };
 		15B4828C1B93D65100B8F93C /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B4828A1B93D65100B8F93C /* Value.swift */; settings = {ASSET_TAGS = (); }; };
 		15B4828E1B94036600B8F93C /* MurmurHash3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B4828D1B94036600B8F93C /* MurmurHash3.swift */; settings = {ASSET_TAGS = (); }; };
@@ -72,6 +77,9 @@
 		159562211B9BA60600AAECC1 /* Field.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
 		159562241B9BA63900AAECC1 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		159562271B9BA66B00AAECC1 /* ReconBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReconBuilder.swift; sourceTree = "<group>"; };
+		1595622D1B9BAA2700AAECC1 /* Text.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
+		159562301B9BAA9000AAECC1 /* Number.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Number.swift; sourceTree = "<group>"; };
+		159562361B9BC91300AAECC1 /* ReconSerializationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReconSerializationTests.swift; sourceTree = "<group>"; };
 		15B4828A1B93D65100B8F93C /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
 		15B4828D1B94036600B8F93C /* MurmurHash3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MurmurHash3.swift; sourceTree = "<group>"; };
 		15B482901B940A1000B8F93C /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
@@ -140,12 +148,14 @@
 				159562211B9BA60600AAECC1 /* Field.swift */,
 				159562241B9BA63900AAECC1 /* Item.swift */,
 				15B4828D1B94036600B8F93C /* MurmurHash3.swift */,
+				159562301B9BAA9000AAECC1 /* Number.swift */,
 				159562271B9BA66B00AAECC1 /* ReconBuilder.swift */,
 				153E82E91B923ACB00929BA1 /* ReconInput.swift */,
 				1579BE531B92497D00EB39AB /* ReconInputString.swift */,
 				1579BE591B924A9D00EB39AB /* ReconParsee.swift */,
 				1579BE5C1B924B1300EB39AB /* ReconParser.swift */,
 				1595621B1B99FCA100AAECC1 /* Record.swift */,
+				1595622D1B9BAA2700AAECC1 /* Text.swift */,
 				15B4828A1B93D65100B8F93C /* Value.swift */,
 			);
 			path = Recon;
@@ -158,6 +168,7 @@
 				153E82F41B923D0A00929BA1 /* ReconInputTests.swift */,
 				1579BE561B9249BA00EB39AB /* ReconInputStringTests.swift */,
 				1579BE651B925B1100EB39AB /* ReconParserTests.swift */,
+				159562361B9BC91300AAECC1 /* ReconSerializationTests.swift */,
 			);
 			path = ReconTests;
 			sourceTree = "<group>";
@@ -339,10 +350,12 @@
 				1579BE5A1B924A9D00EB39AB /* ReconParsee.swift in Sources */,
 				15B4828B1B93D65100B8F93C /* Value.swift in Sources */,
 				153E82F01B923AED00929BA1 /* ReconInput.swift in Sources */,
+				159562311B9BAA9000AAECC1 /* Number.swift in Sources */,
 				159562281B9BA66B00AAECC1 /* ReconBuilder.swift in Sources */,
 				159562221B9BA60600AAECC1 /* Field.swift in Sources */,
 				1579BE541B92497D00EB39AB /* ReconInputString.swift in Sources */,
 				1595621C1B99FCA100AAECC1 /* Record.swift in Sources */,
+				1595622E1B9BAA2700AAECC1 /* Text.swift in Sources */,
 				15B4828E1B94036600B8F93C /* MurmurHash3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -351,6 +364,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				159562391B9BC95200AAECC1 /* ReconSerializationTests.swift in Sources */,
 				153E82F51B923D0A00929BA1 /* ReconInputTests.swift in Sources */,
 				1579BE571B9249BA00EB39AB /* ReconInputStringTests.swift in Sources */,
 				1579BE661B925B1100EB39AB /* ReconParserTests.swift in Sources */,
@@ -367,10 +381,12 @@
 				1579BE5B1B924A9D00EB39AB /* ReconParsee.swift in Sources */,
 				15B4828C1B93D65100B8F93C /* Value.swift in Sources */,
 				153E82F11B923AEE00929BA1 /* ReconInput.swift in Sources */,
+				159562321B9BAA9000AAECC1 /* Number.swift in Sources */,
 				159562291B9BA66B00AAECC1 /* ReconBuilder.swift in Sources */,
 				159562231B9BA60600AAECC1 /* Field.swift in Sources */,
 				1579BE551B92497D00EB39AB /* ReconInputString.swift in Sources */,
 				1595621D1B99FCA100AAECC1 /* Record.swift in Sources */,
+				1595622F1B9BAA2700AAECC1 /* Text.swift in Sources */,
 				15B4828F1B94036600B8F93C /* MurmurHash3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,3 +1,5 @@
+public typealias ReconValue = Value
+
 public enum Value: Hashable {
   case Record(ReconRecord)
   case Text(String)
@@ -5,6 +7,78 @@ public enum Value: Hashable {
   case Number(Double)
   case Extant
   case Absent
+
+  public var isRecord: Bool {
+    if case Record = self {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  public var isText: Bool {
+    if case Text = self {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  public var isData: Bool {
+    if case Data = self {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  public var isNumber: Bool {
+    if case Number = self {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  public var isExtant: Bool {
+    return self == Extant
+  }
+
+  public var isAbsent: Bool {
+    return self == Absent
+  }
+
+  public var record: ReconRecord? {
+    if case Record(let value) = self {
+      return value
+    } else {
+      return nil
+    }
+  }
+
+  public var text: String? {
+    if case Text(let value) = self {
+      return value
+    } else {
+      return nil
+    }
+  }
+
+  public var data: ReconData? {
+    if case Data(let value) = self {
+      return value
+    } else {
+      return nil
+    }
+  }
+
+  public var number: Double? {
+    if case Number(let value) = self {
+      return value
+    } else {
+      return nil
+    }
+  }
 
   public var first: Item {
     switch self {
@@ -51,6 +125,54 @@ public enum Value: Hashable {
     }
   }
 
+  public func writeRecon(inout string: String) {
+    switch self {
+    case Record(let value):
+      value.writeRecon(&string)
+    case Text(let value):
+      value.writeRecon(&string)
+    case Data(let value):
+      value.writeRecon(&string)
+    case Number(let value):
+      value.writeRecon(&string)
+    default:
+      break
+    }
+  }
+
+  public func writeReconBlock(inout string: String) {
+    switch self {
+    case Record(let value):
+      value.writeReconBlock(&string)
+    default:
+      writeRecon(&string)
+    }
+  }
+
+  public var recon: String {
+    switch self {
+    case Record(let value):
+      return value.recon
+    case Text(let value):
+      return value.recon
+    case Data(let value):
+      return value.recon
+    case Number(let value):
+      return value.recon
+    default:
+      return ""
+    }
+  }
+
+  public var reconBlock: String {
+    switch self {
+    case Record(let value):
+      return value.reconBlock
+    default:
+      return recon
+    }
+  }
+
   public var hashValue: Int {
     switch self {
     case Record(let value):
@@ -81,7 +203,7 @@ public enum Value: Hashable {
   }
 }
 
-public func ==(lhs: Value, rhs: Value) -> Bool {
+public func == (lhs: Value, rhs: Value) -> Bool {
   switch (lhs, rhs) {
   case (.Record(let x), .Record(let y)):
     return x == y
