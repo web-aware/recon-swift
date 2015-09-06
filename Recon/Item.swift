@@ -297,14 +297,6 @@ public enum Item: ArrayLiteralConvertible, StringLiteralConvertible, FloatLitera
     return Field(ReconField.Slot(key, ReconValue.Extant))
   }
 
-  public static func Slot(key: String, _ value: ReconValue) -> Item {
-    return Field(ReconField.Slot(ReconValue.Text(key), value))
-  }
-
-  public static func Slot(key: String) -> Item {
-    return Field(ReconField.Slot(ReconValue.Text(key), ReconValue.Extant))
-  }
-
   public static func Record(value: ReconRecord) -> Item {
     return Value(ReconValue.Record(value))
   }

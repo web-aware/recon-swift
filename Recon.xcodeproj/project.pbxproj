@@ -39,6 +39,8 @@
 		15B4828F1B94036600B8F93C /* MurmurHash3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B4828D1B94036600B8F93C /* MurmurHash3.swift */; settings = {ASSET_TAGS = (); }; };
 		15B482911B940A1000B8F93C /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B482901B940A1000B8F93C /* Data.swift */; settings = {ASSET_TAGS = (); }; };
 		15B482921B940A1000B8F93C /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B482901B940A1000B8F93C /* Data.swift */; settings = {ASSET_TAGS = (); }; };
+		15BCD6CF1B9CB87E002EDE8C /* Recon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BCD6CE1B9CB87E002EDE8C /* Recon.swift */; settings = {ASSET_TAGS = (); }; };
+		15BCD6D01B9CB87E002EDE8C /* Recon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BCD6CE1B9CB87E002EDE8C /* Recon.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +86,7 @@
 		15B4828A1B93D65100B8F93C /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
 		15B4828D1B94036600B8F93C /* MurmurHash3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MurmurHash3.swift; sourceTree = "<group>"; };
 		15B482901B940A1000B8F93C /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		15BCD6CE1B9CB87E002EDE8C /* Recon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +154,7 @@
 				159562241B9BA63900AAECC1 /* Item.swift */,
 				15B4828D1B94036600B8F93C /* MurmurHash3.swift */,
 				159562301B9BAA9000AAECC1 /* Number.swift */,
+				15BCD6CE1B9CB87E002EDE8C /* Recon.swift */,
 				159562271B9BA66B00AAECC1 /* ReconBuilder.swift */,
 				153E82E91B923ACB00929BA1 /* ReconInput.swift */,
 				1579BE531B92497D00EB39AB /* ReconInputString.swift */,
@@ -359,6 +363,7 @@
 				1595621C1B99FCA100AAECC1 /* Record.swift in Sources */,
 				1595622E1B9BAA2700AAECC1 /* Text.swift in Sources */,
 				15B4828E1B94036600B8F93C /* MurmurHash3.swift in Sources */,
+				15BCD6CF1B9CB87E002EDE8C /* Recon.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,6 +395,7 @@
 				1595621D1B99FCA100AAECC1 /* Record.swift in Sources */,
 				1595622F1B9BAA2700AAECC1 /* Text.swift in Sources */,
 				15B4828F1B94036600B8F93C /* MurmurHash3.swift in Sources */,
+				15BCD6D01B9CB87E002EDE8C /* Recon.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

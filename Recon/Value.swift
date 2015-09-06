@@ -156,7 +156,7 @@ public enum Value: ArrayLiteralConvertible, StringLiteralConvertible, FloatLiter
 
   public subscript(index: Int) -> Item {
     switch self {
-    case Record(let value):
+    case Record(let value) where 0 <= index && index < value.count:
       return value[index] ?? Item.Absent
     default:
       return Item.Absent
@@ -256,10 +256,6 @@ public enum Value: ArrayLiteralConvertible, StringLiteralConvertible, FloatLiter
 
   public static var False: Value {
     return Text("false")
-  }
-
-  public static func parseRecon(string: String) -> Value? {
-    return ReconDocumentParser().parse(string).value as? Value
   }
 }
 

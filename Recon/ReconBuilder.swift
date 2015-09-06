@@ -85,18 +85,18 @@ extension ReconBuilder {
   }
 }
 
-struct RecordBuilder: ReconBuilder {
+class RecordBuilder: ReconBuilder {
   var record: Record
 
   init(_ record: Record) {
     self.record = record
   }
 
-  init() {
+  convenience init() {
     self.init(Record())
   }
 
-  mutating func append(item: Item) {
+  func append(item: Item) {
     record.append(item)
   }
 
@@ -105,7 +105,7 @@ struct RecordBuilder: ReconBuilder {
   }
 }
 
-struct ValueBuilder: ReconBuilder {
+class ValueBuilder: ReconBuilder {
   var record: Record?
   var value: Value?
 
@@ -114,7 +114,7 @@ struct ValueBuilder: ReconBuilder {
     self.value = nil
   }
 
-  mutating func append(item: Item) {
+  func append(item: Item) {
     if self.record != nil {
       self.record!.append(item)
     } else if case .Value(let value) = item where self.value == nil {

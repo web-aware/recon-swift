@@ -417,11 +417,11 @@ struct ReconBlockItemParser: ReconParser {
       case "{":
         let builder = self.builder ?? RecordBuilder()
         let value = ReconRecordParser(builder)
-        return cont(ReconBlockItemInnerParser(value), input)
+        return cont(ReconBlockItemInnerParser(value, builder), input)
       case "[":
         let builder = self.builder ?? RecordBuilder()
         let value = ReconMarkupParser(builder)
-        return cont(ReconBlockItemInnerParser(value), input)
+        return cont(ReconBlockItemInnerParser(value, builder), input)
       case _ where isNameStartChar(c):
         return cont(ReconBlockItemValueParser(ReconIdentParser(), builder), input)
       case "\"":
@@ -528,9 +528,11 @@ struct ReconBlockItemValueParser: ReconParser {
 
 struct ReconBlockItemInnerParser: ReconParser {
   let value: ReconParser
+  let builder: ReconBuilder
 
-  init(_ value: ReconParser) {
+  init(_ value: ReconParser, _ builder: ReconBuilder) {
     self.value = value
+    self.builder = builder
   }
 
   func feed(input: ReconInput) -> ReconParsee {
@@ -540,9 +542,9 @@ struct ReconBlockItemInnerParser: ReconParser {
     }
     switch parsee {
     case ReconParsee.Cont(let next, let remaining):
-      return cont(ReconBlockItemInnerParser(next), remaining)
-    case ReconParsee.Done(let value as Value, let remaining):
-      return cont(ReconBlockItemRestParser(RecordBuilder(value.record!)), remaining)
+      return cont(ReconBlockItemInnerParser(next, builder), remaining)
+    case ReconParsee.Done(_, let remaining):
+      return cont(ReconBlockItemRestParser(builder), remaining)
     default:
       return parsee
     }
@@ -588,13 +590,13 @@ struct ReconInlineItemParser: ReconParser {
         return cont(ReconInlineItemFieldParser(ReconAttrParser(), builder), input)
       case "{":
         if let builder = self.builder {
-          return cont(ReconInlineItemInnerParser(ReconRecordParser(builder)), input)
+          return cont(ReconInlineItemInnerParser(ReconRecordParser(builder), builder), input)
         } else {
           return cont(ReconInlineItemValueParser(ReconRecordParser()), input)
         }
       case "[":
         if let builder = self.builder {
-          return cont(ReconInlineItemInnerParser(ReconMarkupParser(builder)), input)
+          return cont(ReconInlineItemInnerParser(ReconMarkupParser(builder), builder), input)
         } else {
           return cont(ReconInlineItemValueParser(ReconMarkupParser()), input)
         }
@@ -654,9 +656,9 @@ struct ReconInlineItemFieldRestParser: ReconParser {
     if let c = input.head {
       switch c {
       case "{":
-        return cont(ReconInlineItemValueParser(ReconRecordParser(builder), builder), input)
+        return cont(ReconInlineItemInnerParser(ReconRecordParser(builder), builder), input)
       case "[":
-        return cont(ReconInlineItemValueParser(ReconMarkupParser(builder), builder), input)
+        return cont(ReconInlineItemInnerParser(ReconMarkupParser(builder), builder), input)
       default:
         return done(builder.state, input)
       }
@@ -700,9 +702,11 @@ struct ReconInlineItemValueParser: ReconParser {
 
 struct ReconInlineItemInnerParser: ReconParser {
   let value: ReconParser
+  let builder: ReconBuilder
 
-  init(_ value: ReconParser) {
+  init(_ value: ReconParser, _ builder: ReconBuilder) {
     self.value = value
+    self.builder = builder
   }
 
   func feed(input: ReconInput) -> ReconParsee {
@@ -712,9 +716,9 @@ struct ReconInlineItemInnerParser: ReconParser {
     }
     switch parsee {
     case ReconParsee.Cont(let next, let remaining):
-      return cont(ReconInlineItemInnerParser(next), remaining)
-    case ReconParsee.Done(let value as Value, let remaining):
-      return done(value, remaining)
+      return cont(ReconInlineItemInnerParser(next, builder), remaining)
+    case ReconParsee.Done(_, let remaining):
+      return done(builder.state, remaining)
     default:
       return parsee
     }
@@ -816,9 +820,7 @@ struct ReconRecordKeyThenParser: ReconParser {
       builder.appendValue(key)
       return cont(ReconRecordSeparatorParser(builder), input)
     } else if input.isDone {
-      var builder = self.builder
-      builder.appendValue(key)
-      return done(builder.state, input)
+      return unexpected(input)
     }
     return cont(ReconRecordKeyThenParser(key, builder), input)
   }
@@ -970,13 +972,13 @@ struct ReconMarkupRestParser: ReconParser {
         if !text.isEmpty {
           builder.appendText(text)
         }
-        return cont(ReconMarkupInnerParser(ReconRecordParser(builder)), input)
+        return cont(ReconMarkupInnerParser(ReconRecordParser(builder), builder), input)
       case "[":
         var builder = self.builder
         if !text.isEmpty {
           builder.appendText(text)
         }
-        return cont(ReconMarkupInnerParser(ReconRecordParser(builder)), input)
+        return cont(ReconMarkupInnerParser(ReconMarkupParser(builder), builder), input)
       case "\\":
         return cont(ReconMarkupEscapeParser(text, builder), input.tail)
       default:
@@ -1018,9 +1020,11 @@ struct ReconMarkupValueParser: ReconParser {
 
 struct ReconMarkupInnerParser: ReconParser {
   let value: ReconParser
+  let builder: ReconBuilder
 
-  init(_ value: ReconParser) {
+  init(_ value: ReconParser, _ builder: ReconBuilder) {
     self.value = value
+    self.builder = builder
   }
 
   func feed(input: ReconInput) -> ReconParsee {
@@ -1030,9 +1034,9 @@ struct ReconMarkupInnerParser: ReconParser {
     }
     switch parsee {
     case ReconParsee.Cont(let next, let remaining):
-      return cont(ReconMarkupInnerParser(next), remaining)
-    case ReconParsee.Done(let value as Value, let remaining):
-      return cont(ReconMarkupRestParser(RecordBuilder(value.record!)), remaining)
+      return cont(ReconMarkupInnerParser(next, builder), remaining)
+    case ReconParsee.Done(_, let remaining):
+      return cont(ReconMarkupRestParser(builder), remaining)
     default:
       return parsee
     }
@@ -1441,13 +1445,13 @@ struct ReconDataRestParser: ReconParser {
     var data = self.data
     var state = self.state
     while let c = input.head where isBase64Char(c) {
-      data.append(c)
+      try! data.append(c)
       input = input.tail
       state = (state + 1) % 4
     }
     if let c = input.head where state == 2 {
       if c == "=" {
-        data.append(c)
+        try! data.append(c)
         input = input.tail
         state = 4
       } else {
@@ -1456,7 +1460,7 @@ struct ReconDataRestParser: ReconParser {
     }
     if let c = input.head where state == 3 {
       if c == "=" {
-        data.append(c)
+        try! data.append(c)
         return done(data.state, input.tail)
       } else {
         return expected("base64 digit", input)
@@ -1464,7 +1468,7 @@ struct ReconDataRestParser: ReconParser {
     }
     if let c = input.head where state == 4 {
       if c == "=" {
-        data.append(c)
+        try! data.append(c)
         return done(data.state, input.tail)
       } else {
         return expected("=", input)

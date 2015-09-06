@@ -227,33 +227,47 @@ import Recon
 
 ### Tutorial
 
-Parse RECON strings using the `Value.parseRecon` factory method.
+Parse a RECON-encoded string by invoking the `recon` function.
 
 ```swift
-let event = Value.parseRecon("@event(onClick),@command")!
+let event = recon("@event(onClick),@command")!
 ```
 
-Serialize RECON values using the `recon` method.
+Serialize a RECON value using its `recon` method.
 
 ```swift
 event.recon // returns "{@event(onClick),@command}""
 ```
 
-Use the `reconBlock` method to flatten any top-level records.
+Use a value's `reconBlock` method to flatten its top-level record, if it has one.
 
 ```swift
 event.reconBlock // returns "@event(onClick),@command""
 ```
 
-Subscripts get indexed and keyed values.
+Subscripts get a record's children by index, or by key.
 
 ```swift
-let msg = Value.parseRecon("{from: me, to: you}")!
+let msg = recon("{from: me, to: you}")!
 msg[0] // returns Attr("from", "me")
 msg["to"] // returns Item("you")
 ```
 
-Values are implicitly convertible from array, string, numeric, and boolean literals.
+Subscripting a non-existent key returns `Value.Absent`.
+
+```swift
+msg["cc"]
+msg[2]
+recon("2.0")!["number"]
+```
+
+Because `Value.Absent` is a value, subscripting is a "closed" operation.
+
+```swift
+recon("{foo: {bar: {baz: win}}}")!["foo"]["bar"]["baz"] // returns Item("win")
+```
+
+Implicit conversion from Swift literals to RECON values makes record construction easy.
 
 ```swift
 Value(Attr("img", [Slot("src", "...")]), Slot("width", 10), Slot("height", 10), [Attr("caption", [Slot("lang", "en")]), "English Caption"], [Attr("caption", [Slot("lang", "es")]), "Spanish Caption"])

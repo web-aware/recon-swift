@@ -16,9 +16,12 @@ public struct Data: CustomStringConvertible, Hashable {
     default: break
     }
     var decoder = Base64Decoder(capacity: size)
-    // TODO: Handle invalid encodings
-    for c in cs {
-      decoder.append(c)
+    do {
+      for c in cs {
+        try decoder.append(c)
+      }
+    } catch {
+      return nil
     }
     self = decoder.state
   }
@@ -225,7 +228,7 @@ struct Base64Decoder {
     self.init(data: Data())
   }
 
-  func decodeDigit(c: UnicodeScalar) -> UInt8 {
+  func decodeDigit(c: UnicodeScalar) throws -> UInt8 {
     if c >= "A" && c <= "Z" {
       return UInt8(c.value - UnicodeScalar("A").value)
     } else if c >= "a" && c <= "z" {
@@ -237,17 +240,17 @@ struct Base64Decoder {
     } else if c == "/" || c == "_" {
       return 63
     } else {
-      assert(false)
+      throw DataError.InvalidEncoding
     }
   }
 
-  mutating func decodeQuantum() {
-    let x = decodeDigit(p)
-    let y = decodeDigit(q)
+  mutating func decodeQuantum() throws {
+    let x = try decodeDigit(p)
+    let y = try decodeDigit(q)
     if r != "=" {
-      let z = decodeDigit(r)
+      let z = try decodeDigit(r)
       if s != "=" {
-        let w = decodeDigit(s)
+        let w = try decodeDigit(s)
         data.appendBytes(x << 2 | y >> 4, y << 4 | z >> 2, z << 6 | w)
       } else {
         data.appendBytes(x << 2 | y >> 4, y << 4 | z >> 2)
@@ -258,7 +261,7 @@ struct Base64Decoder {
     }
   }
 
-  mutating func append(c: UnicodeScalar) {
+  mutating func append(c: UnicodeScalar) throws {
     if self.p == "\0" {
       self.p = c
     } else if self.q == "\0" {
@@ -267,7 +270,7 @@ struct Base64Decoder {
       self.r = c
     } else {
       self.s = c
-      decodeQuantum()
+      try decodeQuantum()
       s = "\0"
       r = "\0"
       q = "\0"
@@ -278,4 +281,9 @@ struct Base64Decoder {
   var state: Data {
     return data
   }
+}
+
+
+enum DataError: ErrorType {
+  case InvalidEncoding
 }
