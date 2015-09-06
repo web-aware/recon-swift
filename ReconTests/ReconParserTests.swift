@@ -115,14 +115,14 @@ class ReconParserTests: XCTestCase {
   }
 
   func testParseEmptyData() {
-    XCTAssertEqual(ReconDataParser().parse("%").value as? Data, Data.decodeBase64(""))
+    XCTAssertEqual(ReconDataParser().parse("%").value as? Data, Data(base64: ""))
   }
 
   func testParseNonEmptyData() {
-    XCTAssertEqual(ReconDataParser().parse("%AAAA").value as? Data, Data.decodeBase64("AAAA"))
-    XCTAssertEqual(ReconDataParser().parse("%AAA=").value as? Data, Data.decodeBase64("AAA="))
-    XCTAssertEqual(ReconDataParser().parse("%AA==").value as? Data, Data.decodeBase64("AA=="))
-    XCTAssertEqual(ReconDataParser().parse("%ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/+").value as? Data, Data.decodeBase64("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/+"))
+    XCTAssertEqual(ReconDataParser().parse("%AAAA").value as? Data, Data(base64: "AAAA"))
+    XCTAssertEqual(ReconDataParser().parse("%AAA=").value as? Data, Data(base64: "AAA="))
+    XCTAssertEqual(ReconDataParser().parse("%AA==").value as? Data, Data(base64: "AA=="))
+    XCTAssertEqual(ReconDataParser().parse("%ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/+").value as? Data, Data(base64: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/+"))
   }
 
   func testParseUnpaddedData() {
@@ -145,30 +145,30 @@ class ReconParserTests: XCTestCase {
   }
 
   func testParseBlockItem() {
-    XCTAssertEqual(ReconBlockItemParser().parse("@test ").value as? Value, Value.Record([Item.Attr("test")]))
-    XCTAssertEqual(ReconBlockItemParser().parse("\"test\"").value as? Value, Value.Text("test"))
-    XCTAssertEqual(ReconBlockItemParser().parse("2.5").value as? Value, Value.Number(2.5))
+    XCTAssertEqual(ReconBlockItemParser().parse("@test ").value as? Value, Value(Attr("test")))
+    XCTAssertEqual(ReconBlockItemParser().parse("\"test\"").value as? Value, Value("test"))
+    XCTAssertEqual(ReconBlockItemParser().parse("2.5").value as? Value, Value(2.5))
   }
 
   func testParseEmptyRecord() {
-    XCTAssertEqual(ReconRecordParser().parse("{}").value as? Value, Value.Record([]))
+    XCTAssertEqual(ReconRecordParser().parse("{}").value as? Value, Value())
   }
 
   func testParseNonEmptyRecord() {
-    XCTAssertEqual(ReconRecordParser().parse("{1,2}").value as? Value, Value.Record([Item.Number(1.0), Item.Number(2.0)]))
+    XCTAssertEqual(ReconRecordParser().parse("{1,2}").value as? Value, Value(Item(1.0), Item(2.0)))
   }
 
   func testParseEmptyMarkup() {
-    XCTAssertEqual(ReconMarkupParser().parse("[]").value as? Value, Value.Record([]))
+    XCTAssertEqual(ReconMarkupParser().parse("[]").value as? Value, Value())
   }
 
   func testParseNonEmptyMarkup() {
-    XCTAssertEqual(ReconMarkupParser().parse("[test]").value as? Value, Value.Record([Item.Text("test")]))
+    XCTAssertEqual(ReconMarkupParser().parse("[test]").value as? Value, Value(Item("test")))
   }
 
   func testParseBlock() {
     let x = ReconBlockParser().parse("1,2").value as? Value
-    let y = Value.Record([Item.Number(1.0), Item.Number(2.0)])
+    let y = Value(Item(1.0), Item(2.0))
     XCTAssertEqual(x, y)
   }
 }

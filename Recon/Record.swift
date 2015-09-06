@@ -114,11 +114,31 @@ public struct Record: CollectionType, ArrayLiteralConvertible, Hashable {
   }
 
   var isBlockSafe: Bool {
-    assert(false)
+    let n = items.endIndex
+    var i = items.startIndex
+    while i < n {
+      if items[i].isAttr {
+        return false
+      }
+      i += 1
+    }
+    return true
   }
 
   var isMarkupSafe: Bool {
-    assert(false)
+    let n = items.endIndex
+    var i = items.startIndex
+    if i < n && items[i].isAttr {
+      i += 1
+      while i < n {
+        if items[i].isAttr {
+          return false
+        }
+        i += 1
+      }
+      return true
+    }
+    return false
   }
 
   public func writeReconItem(item: Item, inout _ string: String) {

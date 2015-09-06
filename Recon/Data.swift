@@ -3,11 +3,27 @@ public typealias ReconData = Data
 public struct Data: Hashable {
   var buffer: ManagedBuffer<(Int, Int), UInt8>
 
-  init(capacity: Int) {
+  public init(capacity: Int) {
     buffer = ManagedBuffer<(Int, Int), UInt8>.create(capacity, initialValue: { _ in (0, capacity) })
   }
 
-  init() {
+  public init?(base64 string: String) {
+    let cs = string.unicodeScalars
+    var size = (cs.count / 4) * 3
+    switch cs.count % 3 {
+    case 1, 2: size += 1
+    case 3: size += 2
+    default: break
+    }
+    var decoder = Base64Decoder(capacity: size)
+    // TODO: Handle invalid encodings
+    for c in cs {
+      decoder.append(c)
+    }
+    self = decoder.state
+  }
+
+  public init() {
     self.init(capacity: Data.initialCapacity)
   }
 
@@ -156,23 +172,6 @@ public struct Data: Hashable {
 
   mutating func dealias() {
     resize(capacity)
-  }
-
-
-  public static func decodeBase64(base64: String) -> Data? {
-    let cs = base64.unicodeScalars
-    var size = (cs.count / 4) * 3
-    switch cs.count % 3 {
-    case 1, 2: size += 1
-    case 3: size += 2
-    default: break
-    }
-    var decoder = Base64Decoder(capacity: size)
-    // TODO: Handle invalid encodings
-    for c in cs {
-      decoder.append(c)
-    }
-    return decoder.state
   }
 
   private static let initialCapacity: Int = 32

@@ -1,5 +1,29 @@
 public typealias ReconField = Field
 
+public func Attr(key: String, _ value: Value) -> Item {
+  return Item.Field(Field.Attr(key, value))
+}
+
+public func Attr(key: String) -> Item {
+  return Item.Field(Field.Attr(key, Value.Extant))
+}
+
+public func Slot(key: Value, _ value: Value) -> Item {
+  return Item.Field(Field.Slot(key, value))
+}
+
+public func Slot(key: Value) -> Item {
+  return Item.Field(Field.Slot(key, Value.Extant))
+}
+
+public func Slot(key: String, _ value: Value) -> Item {
+  return Item.Field(Field.Slot(Value.Text(key), value))
+}
+
+public func Slot(key: String) -> Item {
+  return Item.Field(Field.Slot(Value.Text(key), Value.Extant))
+}
+
 public enum Field: Hashable {
   case Attr(String, Value)
   case Slot(Value, Value)

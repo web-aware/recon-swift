@@ -8,6 +8,34 @@ public enum Value: Hashable {
   case Extant
   case Absent
 
+  public init(_ items: Item...) {
+    self = Record(ReconRecord(items))
+  }
+
+  public init(_ items: [Item]) {
+    self = Record(ReconRecord(items))
+  }
+
+  public init(_ value: ReconRecord) {
+    self = Record(value)
+  }
+
+  public init(_ value: String) {
+    self = Text(value)
+  }
+
+  public init(_ value: ReconData) {
+    self = Data(value)
+  }
+
+  public init(base64 string: String) {
+    self = Data(ReconData(base64: string)!)
+  }
+
+  public init(_ value: Double) {
+    self = Number(value)
+  }
+
   public var isRecord: Bool {
     if case Record = self {
       return true

@@ -2,6 +2,34 @@ public enum Item: Hashable {
   case Field(ReconField)
   case Value(ReconValue)
 
+  public init(_ items: Item...) {
+    self = Value(ReconValue(items))
+  }
+
+  public init(_ items: [Item]) {
+    self = Value(ReconValue(items))
+  }
+
+  public init(_ value: ReconRecord) {
+    self = Value(ReconValue(value))
+  }
+
+  public init(_ value: String) {
+    self = Value(ReconValue(value))
+  }
+
+  public init(_ value: ReconData) {
+    self = Value(ReconValue(value))
+  }
+
+  public init(base64 string: String) {
+    self = Value(ReconValue(base64: string))
+  }
+
+  public init(_ value: Double) {
+    self = Value(ReconValue(value))
+  }
+
   public var isField: Bool {
     if case Field = self {
       return true
@@ -221,61 +249,68 @@ public enum Item: Hashable {
     }
   }
 
-
   public static func Attr(key: String, _ value: ReconValue) -> Item {
-    return Item.Field(ReconField.Attr(key, value))
+    return Field(ReconField.Attr(key, value))
   }
 
   public static func Attr(key: String) -> Item {
-    return Item.Field(ReconField.Attr(key, ReconValue.Extant))
+    return Field(ReconField.Attr(key, ReconValue.Extant))
   }
 
   public static func Slot(key: ReconValue, _ value: ReconValue) -> Item {
-    return Item.Field(ReconField.Slot(key, value))
+    return Field(ReconField.Slot(key, value))
   }
 
   public static func Slot(key: ReconValue) -> Item {
-    return Item.Field(ReconField.Slot(key, ReconValue.Extant))
+    return Field(ReconField.Slot(key, ReconValue.Extant))
+  }
+
+  public static func Slot(key: String, _ value: ReconValue) -> Item {
+    return Field(ReconField.Slot(ReconValue.Text(key), value))
+  }
+
+  public static func Slot(key: String) -> Item {
+    return Field(ReconField.Slot(ReconValue.Text(key), ReconValue.Extant))
   }
 
   public static func Record(value: ReconRecord) -> Item {
-    return Item.Value(ReconValue.Record(value))
+    return Value(ReconValue.Record(value))
   }
 
   public static func Record(items: Item...) -> Item {
-    return Item.Value(ReconValue.Record(ReconRecord(items)))
+    return Value(ReconValue.Record(ReconRecord(items)))
   }
 
   public static func Text(value: String) -> Item {
-    return Item.Value(ReconValue.Text(value))
+    return Value(ReconValue.Text(value))
   }
 
   public static func Data(value: ReconData) -> Item {
-    return Item.Value(ReconValue.Data(value))
+    return Value(ReconValue.Data(value))
   }
 
   public static func Data(base64 string: String) -> Item {
-    return Item.Value(ReconValue.Data(ReconData.decodeBase64(string)!))
+    return Value(ReconValue.Data(ReconData(base64: string)!))
   }
 
   public static func Number(value: Double) -> Item {
-    return Item.Value(ReconValue.Number(value))
+    return Value(ReconValue.Number(value))
   }
 
   public static var True: Item {
-    return Item.Value(ReconValue.True)
+    return Value(ReconValue.True)
   }
 
   public static var False: Item {
-    return Item.Value(ReconValue.False)
+    return Value(ReconValue.False)
   }
 
   public static var Extant: Item {
-    return Item.Value(ReconValue.Extant)
+    return Value(ReconValue.Extant)
   }
 
   public static var Absent: Item {
-    return Item.Value(ReconValue.Absent)
+    return Value(ReconValue.Absent)
   }
 }
 
