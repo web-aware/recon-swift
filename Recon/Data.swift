@@ -45,11 +45,11 @@ public struct Data: CustomStringConvertible, Hashable {
 
   public subscript(index: Int) -> UInt8 {
     get {
-      assert(0 <= index && index < size)
+      precondition(0 <= index && index < size)
       return buffer.withUnsafeMutablePointerToElements { $0[index] }
     }
     set {
-      assert(0 <= index && index < size)
+      precondition(0 <= index && index < size)
       buffer.withUnsafeMutablePointerToElements { $0[index] = newValue }
     }
   }
@@ -67,7 +67,7 @@ public struct Data: CustomStringConvertible, Hashable {
       } else if digit == 63 {
         return UnicodeScalar("/")
       } else {
-        assert(false) // unreachable
+        preconditionFailure()
       }
     }
     let n = self.size
@@ -118,7 +118,7 @@ public struct Data: CustomStringConvertible, Hashable {
   public var hashValue: Int {
     let n = size
     return buffer.withUnsafeMutablePointerToElements { bytes in
-      var k = 0xa1c905c7
+      var k = Int(bitPattern: 0xa1c905c7)
       var i = 0
       while i < n {
         k = MurmurHash3.mix(k, Int(bytes[i]))
@@ -197,14 +197,18 @@ public struct Data: CustomStringConvertible, Hashable {
 
 public func == (lhs: Data, rhs: Data) -> Bool {
   let n = lhs.size
-  return n == rhs.size && lhs.buffer.withUnsafeMutablePointerToElements { xs in
-    rhs.buffer.withUnsafeMutablePointerToElements { ys in
-      var i = 0
-      while i < n && xs[i] == ys[i] {
-        i += 1
+  if n == rhs.size {
+    return lhs.buffer.withUnsafeMutablePointerToElements { xs in
+      rhs.buffer.withUnsafeMutablePointerToElements { ys in
+        var i = 0
+        while i < n && xs[i] == ys[i] {
+          i += 1
+        }
+        return i == n
       }
-      return i == n
     }
+  } else {
+    return false
   }
 }
 

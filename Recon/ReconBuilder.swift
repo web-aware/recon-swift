@@ -80,7 +80,7 @@ extension ReconBuilder {
     case let value as Int:
       appendNumber(Double(value))
     default:
-      assert(false)
+      fatalError("unknown value: \(value)")
     }
   }
 }

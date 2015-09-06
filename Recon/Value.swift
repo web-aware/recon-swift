@@ -244,9 +244,9 @@ public enum Value: ArrayLiteralConvertible, StringLiteralConvertible, FloatLiter
     case Number(let value):
       return value.hashValue
     case Extant:
-      return 0x8e02616a
+      return Int(bitPattern: 0x8e02616a)
     case Absent:
-      return 0xd35f02e5
+      return Int(bitPattern: 0xd35f02e5)
     }
   }
 

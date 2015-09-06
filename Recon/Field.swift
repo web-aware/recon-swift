@@ -94,9 +94,9 @@ public enum Field: CustomStringConvertible, Hashable {
   public var hashValue: Int {
     switch self {
     case Attr(let key, let value):
-      return MurmurHash3.hash(0x8b9cf328, key, value)
+      return MurmurHash3.hash(Int(bitPattern: 0x8b9cf328), key, value)
     case Slot(let key, let value):
-      return MurmurHash3.hash(0x543c0c9b, key, value)
+      return MurmurHash3.hash(Int(bitPattern: 0x543c0c9b), key, value)
     }
   }
 }

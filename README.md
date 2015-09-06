@@ -219,7 +219,16 @@ to the previous example.
 
 ## Swift Library
 
-To use the Swift REOCN library, import the `Recon` module.
+To get started with the RECON Swift library, add the following to your
+[CocoaPods](https://cocoapods.org) profile:
+
+```
+use_frameworks!
+pod 'Recon'
+```
+
+Next run `pod install` to load the dependency.  Then import the `Recon`
+module in your code.
 
 ```swift
 import Recon

@@ -87,6 +87,9 @@
 		15B4828D1B94036600B8F93C /* MurmurHash3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MurmurHash3.swift; sourceTree = "<group>"; };
 		15B482901B940A1000B8F93C /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		15BCD6CE1B9CB87E002EDE8C /* Recon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recon.swift; sourceTree = "<group>"; };
+		15BCD6D11B9D0451002EDE8C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		15BCD6D21B9D045A002EDE8C /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		15BCD6D31B9D0465002EDE8C /* Recon.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Recon.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +129,9 @@
 		153E82941B9236AE00929BA1 = {
 			isa = PBXGroup;
 			children = (
+				15BCD6D11B9D0451002EDE8C /* README.md */,
+				15BCD6D21B9D045A002EDE8C /* LICENSE.md */,
+				15BCD6D31B9D0465002EDE8C /* Recon.podspec */,
 				1595623B1B9C300D00AAECC1 /* ReconTutorial.playground */,
 				153E82D41B92378900929BA1 /* Recon */,
 				153E82D51B92379A00929BA1 /* ReconTests */,
@@ -673,7 +679,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Recon/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -725,7 +731,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Recon/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.webaware.Recon;

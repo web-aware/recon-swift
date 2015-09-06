@@ -22,7 +22,7 @@ public struct ReconInputEmpty: ReconInput {
   }
 
   public var tail: ReconInput {
-    assert(false, "tail of empty input")
+    fatalError("tail of empty input")
   }
 }
 
@@ -40,6 +40,6 @@ public struct ReconInputDone: ReconInput {
   }
 
   public var tail: ReconInput {
-    assert(false, "tail of done input")
+    fatalError("tail of done input")
   }
 }

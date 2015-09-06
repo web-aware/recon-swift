@@ -294,7 +294,7 @@ public struct Record: CollectionType, ArrayLiteralConvertible, CustomStringConve
   }
 
   public var hashValue: Int {
-    var h = 0x2494fd1f
+    var h = Int(bitPattern: 0x2494fd1f)
     for item in items {
       h = MurmurHash3.mix(h, item.hashValue)
     }
