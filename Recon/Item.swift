@@ -1,6 +1,34 @@
-public enum Item: CustomStringConvertible, Hashable {
+public enum Item: ArrayLiteralConvertible, StringLiteralConvertible, FloatLiteralConvertible, IntegerLiteralConvertible, BooleanLiteralConvertible, CustomStringConvertible, Hashable {
   case Field(ReconField)
   case Value(ReconValue)
+
+  public init(arrayLiteral items: Item...) {
+    self = Value(ReconValue.Record(ReconRecord(items)))
+  }
+
+  public init(stringLiteral value: String) {
+    self = Value(ReconValue.Text(value))
+  }
+
+  public init(extendedGraphemeClusterLiteral value: Character) {
+    self = Value(ReconValue.Text(String(value)))
+  }
+
+  public init(unicodeScalarLiteral value: UnicodeScalar) {
+    self = Value(ReconValue.Text(String(value)))
+  }
+
+  public init(floatLiteral value: Double) {
+    self = Value(ReconValue.Number(value))
+  }
+
+  public init(integerLiteral value: Int) {
+    self = Value(ReconValue.Number(Double(value)))
+  }
+
+  public init(booleanLiteral value: Bool) {
+    self = Value(value ? ReconValue.True : ReconValue.False)
+  }
 
   public init(_ items: Item...) {
     self = Value(ReconValue(items))

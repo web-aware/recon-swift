@@ -1,12 +1,40 @@
 public typealias ReconValue = Value
 
-public enum Value: CustomStringConvertible, Hashable {
+public enum Value: ArrayLiteralConvertible, StringLiteralConvertible, FloatLiteralConvertible, IntegerLiteralConvertible, BooleanLiteralConvertible, CustomStringConvertible, Hashable {
   case Record(ReconRecord)
   case Text(String)
   case Data(ReconData)
   case Number(Double)
   case Extant
   case Absent
+
+  public init(arrayLiteral items: Item...) {
+    self = Record(ReconRecord(items))
+  }
+
+  public init(stringLiteral value: String) {
+    self = Text(value)
+  }
+
+  public init(extendedGraphemeClusterLiteral value: Character) {
+    self = Text(String(value))
+  }
+
+  public init(unicodeScalarLiteral value: UnicodeScalar) {
+    self = Text(String(value))
+  }
+
+  public init(floatLiteral value: Double) {
+    self = Number(value)
+  }
+
+  public init(integerLiteral value: Int) {
+    self = Number(Double(value))
+  }
+
+  public init(booleanLiteral value: Bool) {
+    self = value ? Value.True : Value.False
+  }
 
   public init(_ items: Item...) {
     self = Record(ReconRecord(items))

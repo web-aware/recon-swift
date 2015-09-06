@@ -155,8 +155,8 @@ class ReconParserTests: XCTestCase {
   }
 
   func testParseNonEmptyRecord() {
-    XCTAssertEqual(ReconRecordParser().parse("{1} ").value as? Value, Value(Item(1.0)))
-    XCTAssertEqual(ReconRecordParser().parse("{1,2} ").value as? Value, Value(Item(1.0), Item(2.0)))
+    XCTAssertEqual(ReconRecordParser().parse("{1} ").value as? Value, Value([1]))
+    XCTAssertEqual(ReconRecordParser().parse("{1,2} ").value as? Value, Value(1, 2))
   }
 
   func testParseEmptyMarkup() {
@@ -164,12 +164,10 @@ class ReconParserTests: XCTestCase {
   }
 
   func testParseNonEmptyMarkup() {
-    XCTAssertEqual(ReconMarkupParser().parse("[test]").value as? Value, Value(Item("test")))
+    XCTAssertEqual(ReconMarkupParser().parse("[test]").value as? Value, Value(["test"]))
   }
 
   func testParseBlock() {
-    let x = ReconBlockParser().parse("1,2").value as? Value
-    let y = Value(Item(1.0), Item(2.0))
-    XCTAssertEqual(x, y)
+    XCTAssertEqual(ReconBlockParser().parse("1,2").value as? Value, Value(1, 2))
   }
 }

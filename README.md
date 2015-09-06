@@ -230,19 +230,19 @@ import Recon
 Parse RECON strings using the `Value.parseRecon` factory method.
 
 ```swift
-let event = Value.parseRecon("@event(onClick),@command()")!
+let event = Value.parseRecon("@event(onClick),@command")!
 ```
 
 Serialize RECON values using the `recon` method.
 
 ```swift
-event.recon // returns "{@event(onClick),@command()}""
+event.recon // returns "{@event(onClick),@command}""
 ```
 
 Use the `reconBlock` method to flatten any top-level records.
 
 ```swift
-event.reconBlock // returns "@event(onClick),@command()""
+event.reconBlock // returns "@event(onClick),@command""
 ```
 
 Subscripts get indexed and keyed values.
@@ -251,6 +251,13 @@ Subscripts get indexed and keyed values.
 let msg = Value.parseRecon("{from: me, to: you}")!
 msg[0] // returns Attr("from", "me")
 msg["to"] // returns Item("you")
+```
+
+Values are implicitly convertible from array, string, numeric, and boolean literals.
+
+```swift
+Value(Attr("img", [Slot("src", "...")]), Slot("width", 10), Slot("height", 10), [Attr("caption", [Slot("lang", "en")]), "English Caption"], [Attr("caption", [Slot("lang", "es")]), "Spanish Caption"])
+// returns @img(src:"..."){width:10,height:10,@caption(lang:en)"English Caption",@caption(lang:es)"Spanish Caption"}
 ```
 
 ### Data Model

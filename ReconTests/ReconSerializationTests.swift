@@ -7,15 +7,15 @@ class ReconSerializationTests: XCTestCase {
   }
 
   func testSerializeEmptyRecords() {
-    XCTAssertEqual(Value().recon, "{}")
+    XCTAssertEqual(Value([]).recon, "{}")
   }
 
   func testSerializeUnaryRecords() {
-    XCTAssertEqual(Value(Item(1)).recon, "{1}")
+    XCTAssertEqual(Value([1]).recon, "{1}")
   }
 
   func testSerializeNonEmptyRecords() {
-    XCTAssertEqual(Value(Item(1), Item(2), Item("3"), Item.True).recon, "{1,2,\"3\",true}")
+    XCTAssertEqual(Value(1, 2, "3", true).recon, "{1,2,\"3\",true}")
   }
 
   func testSerializeEmptyText() {
@@ -36,6 +36,7 @@ class ReconSerializationTests: XCTestCase {
 
   func testSerializeNonEmptyData() {
     XCTAssertEqual(Value(base64: "AA==").recon, "%AA==")
+    XCTAssertEqual(Value(base64: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/+").recon, "%ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/+")
   }
 
   func testSerializeNumbers() {
@@ -55,30 +56,30 @@ class ReconSerializationTests: XCTestCase {
   }
 
   func testSerializeExtantAttributesWithNoParameters() {
-    XCTAssertEqual(Value(Attr("answer")).recon, "@answer")
+    XCTAssertEqual(Value([Attr("answer")]).recon, "@answer")
   }
 
   func testSerializeExtantAttributesWithSingleParameters() {
-    XCTAssertEqual(Value(Attr("answer", Value())).recon, "@answer({})")
-    XCTAssertEqual(Value(Attr("answer", Value("42"))).recon, "@answer(\"42\")")
-    XCTAssertEqual(Value(Attr("answer", Value(42))).recon, "@answer(42)")
-    XCTAssertEqual(Value(Attr("answer", Value.True)).recon, "@answer(true)")
+    XCTAssertEqual(Value(Attr("answer", [])).recon, "@answer({})")
+    XCTAssertEqual(Value(Attr("answer", "42")).recon, "@answer(\"42\")")
+    XCTAssertEqual(Value(Attr("answer", 42)).recon, "@answer(42)")
+    XCTAssertEqual(Value(Attr("answer", true)).recon, "@answer(true)")
   }
 
   func testSerializeExtantAttributesWithMultipleParameters() {
-    XCTAssertEqual(Value(Attr("answer", Value(Item(42), Item.True))).recon, "@answer(42,true)")
+    XCTAssertEqual(Value(Attr("answer", [42, true])).recon, "@answer(42,true)")
   }
 
   func testSerializeExtantAttributesWithNamedParameters() {
-    XCTAssertEqual(Value(Attr("answer", Value(Slot("number", Value(42))))).recon, "@answer(number:42)")
+    XCTAssertEqual(Value(Attr("answer", [Slot("number", 42)])).recon, "@answer(number:42)")
   }
 
   func testSerializeRecordsWithIdentKeyedSlots() {
-    XCTAssertEqual(Value(Slot("a", Value(1)), Item.False, Slot("c", Value(3))).recon, "{a:1,false,c:3}")
+    XCTAssertEqual(Value(Slot("a", 1), false, Slot("c", 3)).recon, "{a:1,false,c:3}")
   }
 
   func testSerializeRecordsWithValueKeyedSlots() {
-    XCTAssertEqual(Value(Slot(Value(1), Value("one")), Slot(Value(Attr("id"), Item("foo")), Value("bar"))).recon, "{1:one,@id foo:bar}")
+    XCTAssertEqual(Value(Slot(1, "one"), Slot([Attr("id"), "foo"], "bar")).recon, "{1:one,@id foo:bar}")
   }
 
   func testSerializeRecordsWithExtantSlots() {
@@ -86,127 +87,127 @@ class ReconSerializationTests: XCTestCase {
   }
 
   func testSerializePrefixAttributedEmptyRecords() {
-    XCTAssertEqual(Value(Attr("hello"), Item()).recon, "@hello{{}}")
+    XCTAssertEqual(Value(Attr("hello"), []).recon, "@hello{{}}")
   }
 
   func testSerializePrefixAttributedEmptyText() {
-    XCTAssertEqual(Value(Attr("hello"), Item("")).recon, "@hello\"\"")
+    XCTAssertEqual(Value(Attr("hello"), "").recon, "@hello\"\"")
   }
 
   func testSerializePrefixAttributedNonEmptyText() {
-    XCTAssertEqual(Value(Attr("hello"), Item("world!")).recon, "@hello\"world!\"")
+    XCTAssertEqual(Value(Attr("hello"), "world!").recon, "@hello\"world!\"")
   }
 
   func testSerializePrefixAttributedNumbers() {
-    XCTAssertEqual(Value(Attr("answer"), Item(42)).recon, "@answer 42")
+    XCTAssertEqual(Value(Attr("answer"), 42).recon, "@answer 42")
   }
 
   func testSerializePrefixAttributedBools() {
-    XCTAssertEqual(Value(Attr("answer"), Item.True).recon, "@answer true")
+    XCTAssertEqual(Value(Attr("answer"), true).recon, "@answer true")
   }
 
   func testSerializePrefixAttributedSlots() {
-    XCTAssertEqual(Value(Attr("hello"), Slot("subject", Value("world!"))).recon, "@hello{subject:\"world!\"}")
+    XCTAssertEqual(Value(Attr("hello"), Slot("subject", "world!")).recon, "@hello{subject:\"world!\"}")
   }
 
   func testSerializePostfixAttributedEmptyRecords() {
-    XCTAssertEqual(Value(Item(), Attr("signed")).recon, "{{}}@signed")
+    XCTAssertEqual(Value([], Attr("signed")).recon, "{{}}@signed")
   }
 
   func testSerializePostfixAttributedEmptyText() {
-    XCTAssertEqual(Value(Item(""), Attr("signed")).recon, "\"\"@signed")
+    XCTAssertEqual(Value("", Attr("signed")).recon, "\"\"@signed")
   }
 
   func testSerializePostfixAttributedNonEmptyText() {
-    XCTAssertEqual(Value(Item("world!"), Attr("signed")).recon, "\"world!\"@signed")
+    XCTAssertEqual(Value("world!", Attr("signed")).recon, "\"world!\"@signed")
   }
 
   func testSerializePostfixAttributedNumbers() {
-    XCTAssertEqual(Value(Item(42), Attr("signed")).recon, "42@signed")
+    XCTAssertEqual(Value(42, Attr("signed")).recon, "42@signed")
   }
 
   func testSerializePostfixAttributedBools() {
-    XCTAssertEqual(Value(Item.True, Attr("signed")).recon, "true@signed")
+    XCTAssertEqual(Value(true, Attr("signed")).recon, "true@signed")
   }
 
   func testSerializePostfixAttributedSlots() {
-    XCTAssertEqual(Value(Slot("subject", Value("world!")), Attr("signed")).recon, "{subject:\"world!\"}@signed")
+    XCTAssertEqual(Value(Slot("subject", "world!"), Attr("signed")).recon, "{subject:\"world!\"}@signed")
   }
 
   func testSerializeSingleValuesWithMultiplePostfixAttributes() {
-    XCTAssertEqual(Value(Item(6), Attr("months"), Attr("remaining")).recon, "6@months@remaining")
+    XCTAssertEqual(Value(6, Attr("months"), Attr("remaining")).recon, "6@months@remaining")
   }
 
   func testSerializeSingleValuesWithCircumfixAttributes() {
-    XCTAssertEqual(Value(Attr("a"), Attr("b"), Item.False, Attr("x"), Attr("y")).recon, "@a@b false@x@y")
+    XCTAssertEqual(Value(Attr("a"), Attr("b"), false, Attr("x"), Attr("y")).recon, "@a@b false@x@y")
   }
 
   func testSerializeSingleValuesWithInterspersedAttributes() {
-    XCTAssertEqual(Value(Attr("a"), Item(1), Attr("b"), Item(2)).recon, "@a 1@b 2")
+    XCTAssertEqual(Value(Attr("a"), 1, Attr("b"), 2).recon, "@a 1@b 2")
   }
 
   func testSerializeSingleValuesWithInterspersedAttributeGroups() {
-    XCTAssertEqual(Value(Attr("a"), Attr("b"), Item(1), Attr("c"), Attr("d"), Item(2)).recon, "@a@b 1@c@d 2")
+    XCTAssertEqual(Value(Attr("a"), Attr("b"), 1, Attr("c"), Attr("d"), 2).recon, "@a@b 1@c@d 2")
   }
 
   func testSerializeMultipleItemsWithMultiplePostfixAttributes() {
-    XCTAssertEqual(Value(Item(1), Item(2), Attr("x"), Attr("y")).recon, "{1,2}@x@y")
+    XCTAssertEqual(Value(1, 2, Attr("x"), Attr("y")).recon, "{1,2}@x@y")
   }
 
   func testSerializeMultipleItemsWithCircumfixAttributes() {
-    XCTAssertEqual(Value(Attr("a"), Attr("b"), Item(1), Item(2), Attr("x"), Attr("y")).recon, "@a@b{1,2}@x@y")
+    XCTAssertEqual(Value(Attr("a"), Attr("b"), 1, 2, Attr("x"), Attr("y")).recon, "@a@b{1,2}@x@y")
   }
 
   func testSerializeMultipleItemsWithInterspersedAttributes() {
-    XCTAssertEqual(Value(Attr("a"), Item(1), Item(2), Attr("b"), Item(3), Item(4)).recon, "@a{1,2}@b{3,4}")
+    XCTAssertEqual(Value(Attr("a"), 1, 2, Attr("b"), 3, 4).recon, "@a{1,2}@b{3,4}")
   }
 
   func testSerializeMultipleItemsWithInterspersedAttributeGroups() {
-    XCTAssertEqual(Value(Attr("a"), Attr("b"), Item(1), Item(2), Attr("c"), Attr("d"), Item(3), Item(4)).recon, "@a@b{1,2}@c@d{3,4}")
+    XCTAssertEqual(Value(Attr("a"), Attr("b"), 1, 2, Attr("c"), Attr("d"), 3, 4).recon, "@a@b{1,2}@c@d{3,4}")
   }
 
   func testSerializeMarkup() {
-    XCTAssertEqual(Value(Item("Hello, "), Item(Attr("em"), Item("world")), Item("!")).recon, "[Hello, @em[world]!]")
-    XCTAssertEqual(Value(Item("Hello, "), Item(Attr("em", Value(Slot("class", Value("subject")))), Item("world")), Item("!")).recon, "[Hello, @em(class:subject)[world]!]")
+    XCTAssertEqual(Value("Hello, ", [Attr("em"), "world"], "!").recon, "[Hello, @em[world]!]")
+    XCTAssertEqual(Value("Hello, ", [Attr("em", [Slot("class", "subject")]), "world"], "!").recon, "[Hello, @em(class:subject)[world]!]")
   }
 
   func testSerializeNestedMarkup() {
-    XCTAssertEqual(Value(Item("X "), Item(Attr("p"), Item("Y "), Item(Attr("q"), Item("Z")), Item(".")), Item(".")).recon, "[X @p[Y @q[Z].].]")
+    XCTAssertEqual(Value("X ", [Attr("p"), "Y ", [Attr("q"), "Z"], "."], ".").recon, "[X @p[Y @q[Z].].]")
   }
 
   func testSerializeMarkupWithNonPrefixAttributes() {
-    XCTAssertEqual(Value(Item("X "), Item(Attr("p"), Item("Y."), Attr("q")), Item(".")).recon, "[X {@p\"Y.\"@q}.]")
+    XCTAssertEqual(Value("X ", [Attr("p"), "Y.", Attr("q")], ".").recon, "[X {@p\"Y.\"@q}.]")
   }
 
   func testSerializeMarkupInAttributeParameters() {
-    XCTAssertEqual(Value(Attr("msg", Value(Item("Hello, "), Item(Attr("em"), Item("world")), Item("!")))).recon, "@msg([Hello, @em[world]!])")
+    XCTAssertEqual(Value(Attr("msg", ["Hello, ", [Attr("em"), "world"], "!"])).recon, "@msg([Hello, @em[world]!])")
   }
 
   func testSerializeMarkupEmbeddedValues() {
-    XCTAssertEqual(Value(Item("Hello, "), Item(6), Item("!")).recon, "[Hello, {6}!]")
-    XCTAssertEqual(Value(Item("Hello, "), Item(6), Item(7), Item("!")).recon, "[Hello, {6,7}!]")
+    XCTAssertEqual(Value("Hello, ", 6, "!").recon, "[Hello, {6}!]")
+    XCTAssertEqual(Value("Hello, ", 6, 7, "!").recon, "[Hello, {6,7}!]")
   }
 
   func testSerializeMarkupEmbeddedValuesWithSubsequentAttributes() {
-    XCTAssertEqual(Value(Item("Wait "), Item(1), Attr("second"), Item(" longer"), Item(Attr("please"))).recon, "[Wait {1}]@second[ longer@please]")
-    XCTAssertEqual(Value(Item("Wait "), Item(1), Item(2), Attr("second"), Item(" longer"), Item(Attr("please"))).recon, "[Wait {1,2}]@second[ longer@please]")
+    XCTAssertEqual(Value("Wait ", 1, Attr("second"), " longer", [Attr("please")]).recon, "[Wait {1}]@second[ longer@please]")
+    XCTAssertEqual(Value("Wait ", 1, 2, Attr("second"), " longer", [Attr("please")]).recon, "[Wait {1,2}]@second[ longer@please]")
   }
 
   func testSerializeMarkupEmbeddedRecords() {
-    XCTAssertEqual(Value(Item("Hello, "), Item(), Item("!")).recon, "[Hello, {{}}!]")
-    XCTAssertEqual(Value(Item("Hello, "), Item(Item(1)), Item("!")).recon, "[Hello, {{1}}!]")
-    XCTAssertEqual(Value(Item("Hello, "), Item(Item(1), Item(2)), Item("!")).recon, "[Hello, {{1,2}}!]")
+    XCTAssertEqual(Value("Hello, ", [], "!").recon, "[Hello, {{}}!]")
+    XCTAssertEqual(Value("Hello, ", [1], "!").recon, "[Hello, {{1}}!]")
+    XCTAssertEqual(Value("Hello, ", [1, 2], "!").recon, "[Hello, {{1,2}}!]")
   }
 
   func testSerializeMarkupEmbeddedAttributedValues() {
-    XCTAssertEqual(Value(Item("Hello, "), Item(Attr("number"), Item(6)), Item("!")).recon, "[Hello, @number{6}!]")
+    XCTAssertEqual(Value("Hello, ", [Attr("number"), 6], "!").recon, "[Hello, @number{6}!]")
   }
 
   func testSerializeMarkupEmbeddedAttributedRecords() {
-    XCTAssertEqual(Value(Item("Hello, "), Item(Attr("choice"), Item("Earth"), Item("Mars")), Item("!")).recon, "[Hello, @choice{Earth,Mars}!]")
+    XCTAssertEqual(Value("Hello, ", [Attr("choice"), "Earth", "Mars"], "!").recon, "[Hello, @choice{Earth,Mars}!]")
   }
 
   func testSerializeMarkupEmbeddedRecordsWithNonPrefixAttributes() {
-    XCTAssertEqual(Value(Item("Hello, "), Item(Item(1), Attr("second")), Item("!")).recon, "[Hello, {1@second}!]")
+    XCTAssertEqual(Value("Hello, ", [1, Attr("second")], "!").recon, "[Hello, {1@second}!]")
   }
 }
