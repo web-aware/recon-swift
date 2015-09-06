@@ -1,4 +1,4 @@
-public enum Item: Hashable {
+public enum Item: CustomStringConvertible, Hashable {
   case Field(ReconField)
   case Value(ReconValue)
 
@@ -238,6 +238,10 @@ public enum Item: Hashable {
     case Value(let value):
       return value.reconBlock
     }
+  }
+
+  public var description: String {
+    return recon
   }
 
   public var hashValue: Int {

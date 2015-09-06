@@ -219,11 +219,64 @@ to the previous example.
 
 ## Swift Library
 
-TODO
+To use the Swift REOCN library, import the `Recon` module.
+
+```swift
+import Recon
+```
 
 ### Tutorial
 
-TODO
+Parse RECON strings using the `Value.parseRecon` factory method.
+
+```swift
+let event = Value.parseRecon("@event(onClick),@command()")!
+```
+
+Serialize RECON values using the `recon` method.
+
+```swift
+event.recon // returns "{@event(onClick),@command()}""
+```
+
+Use the `reconBlock` method to flatten any top-level records.
+
+```swift
+event.reconBlock // returns "@event(onClick),@command()""
+```
+
+Subscripts get indexed and keyed values.
+
+```swift
+let msg = Value.parseRecon("{from: me, to: you}")!
+msg[0] // returns Attr("from", "me")
+msg["to"] // returns Item("you")
+```
+
+### Data Model
+
+The Swift library represents RECON values using the following algebraic data type:
+
+```swift
+enum Item {
+  case Field(Recon.Field)
+  case Value(Recon.Value)
+}
+
+enum Field {
+  case Attr(String, Value)
+  case Slot(Value, Value)
+}
+
+enum Value {
+  case Record(Recon.Record)
+  case Text(String)
+  case Data(Recon.Data)
+  case Number(Double)
+  case Extant
+  case Absent
+}
+```
 
 ## Language Grammar
 

@@ -1,4 +1,4 @@
-import Darwin // Needed for rint(); are you fucking kidding me?
+import Darwin
 
 extension Double {
   public func writeRecon(inout string: String) {

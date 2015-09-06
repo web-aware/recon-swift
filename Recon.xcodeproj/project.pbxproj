@@ -80,6 +80,7 @@
 		1595622D1B9BAA2700AAECC1 /* Text.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		159562301B9BAA9000AAECC1 /* Number.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Number.swift; sourceTree = "<group>"; };
 		159562361B9BC91300AAECC1 /* ReconSerializationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReconSerializationTests.swift; sourceTree = "<group>"; };
+		1595623B1B9C300D00AAECC1 /* ReconTutorial.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = ReconTutorial.playground; sourceTree = "<group>"; };
 		15B4828A1B93D65100B8F93C /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
 		15B4828D1B94036600B8F93C /* MurmurHash3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MurmurHash3.swift; sourceTree = "<group>"; };
 		15B482901B940A1000B8F93C /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
@@ -122,6 +123,7 @@
 		153E82941B9236AE00929BA1 = {
 			isa = PBXGroup;
 			children = (
+				1595623B1B9C300D00AAECC1 /* ReconTutorial.playground */,
 				153E82D41B92378900929BA1 /* Recon */,
 				153E82D51B92379A00929BA1 /* ReconTests */,
 				153E82A11B9236CA00929BA1 /* Products */,

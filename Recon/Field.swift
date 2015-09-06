@@ -24,7 +24,7 @@ public func Slot(key: String) -> Item {
   return Item.Field(Field.Slot(Value.Text(key), Value.Extant))
 }
 
-public enum Field: Hashable {
+public enum Field: CustomStringConvertible, Hashable {
   case Attr(String, Value)
   case Slot(Value, Value)
 
@@ -93,6 +93,10 @@ public enum Field: Hashable {
     var string = ""
     writeRecon(&string)
     return string
+  }
+
+  public var description: String {
+    return recon
   }
 
   public var hashValue: Int {

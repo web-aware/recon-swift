@@ -1,6 +1,6 @@
 public typealias ReconData = Data
 
-public struct Data: Hashable {
+public struct Data: CustomStringConvertible, Hashable {
   var buffer: ManagedBuffer<(Int, Int), UInt8>
 
   public init(capacity: Int) {
@@ -106,6 +106,10 @@ public struct Data: Hashable {
     var string = ""
     writeRecon(&string)
     return string
+  }
+
+  public var description: String {
+    return recon
   }
 
   public var hashValue: Int {

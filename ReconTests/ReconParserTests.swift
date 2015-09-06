@@ -155,7 +155,8 @@ class ReconParserTests: XCTestCase {
   }
 
   func testParseNonEmptyRecord() {
-    XCTAssertEqual(ReconRecordParser().parse("{1,2}").value as? Value, Value(Item(1.0), Item(2.0)))
+    XCTAssertEqual(ReconRecordParser().parse("{1} ").value as? Value, Value(Item(1.0)))
+    XCTAssertEqual(ReconRecordParser().parse("{1,2} ").value as? Value, Value(Item(1.0), Item(2.0)))
   }
 
   func testParseEmptyMarkup() {

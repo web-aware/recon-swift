@@ -1,6 +1,6 @@
 public typealias ReconValue = Value
 
-public enum Value: Hashable {
+public enum Value: CustomStringConvertible, Hashable {
   case Record(ReconRecord)
   case Text(String)
   case Data(ReconData)
@@ -199,6 +199,10 @@ public enum Value: Hashable {
     default:
       return recon
     }
+  }
+
+  public var description: String {
+    return recon
   }
 
   public var hashValue: Int {

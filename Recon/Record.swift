@@ -1,6 +1,6 @@
 public typealias ReconRecord = Record
 
-public struct Record: CollectionType, ArrayLiteralConvertible, Hashable {
+public struct Record: CollectionType, ArrayLiteralConvertible, CustomStringConvertible, Hashable {
   public typealias Element = Item
   public typealias Index = Int
 
@@ -287,6 +287,10 @@ public struct Record: CollectionType, ArrayLiteralConvertible, Hashable {
       }
       self.fields = fields
     }
+  }
+
+  public var description: String {
+    return recon
   }
 
   public var hashValue: Int {
