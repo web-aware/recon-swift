@@ -41,6 +41,10 @@
 		15B482921B940A1000B8F93C /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B482901B940A1000B8F93C /* Data.swift */; settings = {ASSET_TAGS = (); }; };
 		15BCD6CF1B9CB87E002EDE8C /* Recon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BCD6CE1B9CB87E002EDE8C /* Recon.swift */; settings = {ASSET_TAGS = (); }; };
 		15BCD6D01B9CB87E002EDE8C /* Recon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15BCD6CE1B9CB87E002EDE8C /* Recon.swift */; settings = {ASSET_TAGS = (); }; };
+		15BCD76E1B9E3506002EDE8C /* ReconParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1579BE651B925B1100EB39AB /* ReconParserTests.swift */; settings = {ASSET_TAGS = (); }; };
+		15BCD76F1B9E350A002EDE8C /* ReconSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159562361B9BC91300AAECC1 /* ReconSerializationTests.swift */; settings = {ASSET_TAGS = (); }; };
+		15BCD7701B9E350D002EDE8C /* ReconInputStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1579BE561B9249BA00EB39AB /* ReconInputStringTests.swift */; settings = {ASSET_TAGS = (); }; };
+		15BCD7711B9E3512002EDE8C /* ReconInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153E82F41B923D0A00929BA1 /* ReconInputTests.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,9 +66,9 @@
 
 /* Begin PBXFileReference section */
 		153E82A01B9236CA00929BA1 /* Recon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Recon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		153E82AA1B9236CA00929BA1 /* Recon Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Recon Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		153E82AA1B9236CA00929BA1 /* ReconTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = ReconTests.xctest; path = "ReconTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		153E82BD1B9236EA00929BA1 /* Recon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Recon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		153E82C61B9236EB00929BA1 /* Recon Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Recon Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		153E82C61B9236EB00929BA1 /* ReconTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = ReconTests.xctest; path = "ReconTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		153E82E71B923ACB00929BA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		153E82E81B923ACB00929BA1 /* Recon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Recon.h; sourceTree = "<group>"; };
 		153E82E91B923ACB00929BA1 /* ReconInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReconInput.swift; sourceTree = "<group>"; };
@@ -143,9 +147,9 @@
 			isa = PBXGroup;
 			children = (
 				153E82A01B9236CA00929BA1 /* Recon.framework */,
-				153E82AA1B9236CA00929BA1 /* Recon Tests.xctest */,
+				153E82AA1B9236CA00929BA1 /* ReconTests.xctest */,
 				153E82BD1B9236EA00929BA1 /* Recon.framework */,
-				153E82C61B9236EB00929BA1 /* Recon Tests.xctest */,
+				153E82C61B9236EB00929BA1 /* ReconTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -238,7 +242,7 @@
 			);
 			name = "Recon OSX Tests";
 			productName = "Recon OSX Tests";
-			productReference = 153E82AA1B9236CA00929BA1 /* Recon Tests.xctest */;
+			productReference = 153E82AA1B9236CA00929BA1 /* ReconTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		153E82BC1B9236EA00929BA1 /* Recon iOS */ = {
@@ -274,7 +278,7 @@
 			);
 			name = "Recon iOS Tests";
 			productName = "Recon iOS Tests";
-			productReference = 153E82C61B9236EB00929BA1 /* Recon Tests.xctest */;
+			productReference = 153E82C61B9236EB00929BA1 /* ReconTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -409,6 +413,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15BCD76F1B9E350A002EDE8C /* ReconSerializationTests.swift in Sources */,
+				15BCD76E1B9E3506002EDE8C /* ReconParserTests.swift in Sources */,
+				15BCD7711B9E3512002EDE8C /* ReconInputTests.swift in Sources */,
+				15BCD7701B9E350D002EDE8C /* ReconInputStringTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
